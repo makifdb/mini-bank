@@ -1,0 +1,828 @@
+definitions:
+  account.Account:
+    properties:
+      balance:
+        type: number
+      code:
+        type: string
+      created_at:
+        description: Timestamp when the entity was created
+        type: string
+      deleted_at:
+        description: Timestamp when the entity was deleted
+        type: string
+      id:
+        description: Unique identifier
+        type: string
+      updated_at:
+        description: Timestamp when the entity was last updated
+        type: string
+      user_id:
+        type: string
+    type: object
+  dto.CreateAccountRequest:
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      user_id:
+        type: string
+    required:
+    - amount
+    - currency
+    - user_id
+    type: object
+  dto.CreateFeeRequest:
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      type:
+        type: string
+    required:
+    - amount
+    - currency
+    - type
+    type: object
+  dto.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      last_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    type: object
+  dto.DepositRequest:
+    properties:
+      amount:
+        type: number
+    required:
+    - amount
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  dto.RefreshTokenRequest:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  dto.SignUpRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  dto.TransferRequest:
+    properties:
+      amount:
+        type: number
+      from_account_id:
+        type: string
+      to_account_id:
+        type: string
+    required:
+    - amount
+    - from_account_id
+    - to_account_id
+    type: object
+  dto.UpdateAccountRequest:
+    properties:
+      balance:
+        type: number
+      currency:
+        type: string
+    required:
+    - balance
+    - currency
+    type: object
+  dto.UpdateFeeRequest:
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      type:
+        type: string
+    required:
+    - amount
+    - currency
+    - type
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      last_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    type: object
+  dto.VerificationRequest:
+    properties:
+      email:
+        type: string
+      verification_code:
+        type: string
+    required:
+    - email
+    - verification_code
+    type: object
+  dto.WithdrawRequest:
+    properties:
+      amount:
+        type: number
+    required:
+    - amount
+    type: object
+  error.APIError:
+    properties:
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+  fee.Fee:
+    properties:
+      amount:
+        type: number
+      created_at:
+        description: Timestamp when the entity was created
+        type: string
+      currency_code:
+        type: string
+      deleted_at:
+        description: Timestamp when the entity was deleted
+        type: string
+      id:
+        description: Unique identifier
+        type: string
+      type:
+        type: string
+      updated_at:
+        description: Timestamp when the entity was last updated
+        type: string
+    type: object
+  user.User:
+    properties:
+      created_at:
+        description: Timestamp when the entity was created
+        type: string
+      deleted_at:
+        description: Timestamp when the entity was deleted
+        type: string
+      email:
+        description: Email address of the user
+        type: string
+      first_name:
+        description: First name of the user
+        type: string
+      id:
+        description: Unique identifier
+        type: string
+      last_name:
+        description: Last name of the user
+        type: string
+      updated_at:
+        description: Timestamp when the entity was last updated
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /accounts:
+    get:
+      consumes:
+      - application/json
+      description: Get accounts by user ID
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/account.Account'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Get accounts by user ID
+      tags:
+      - accounts
+    post:
+      consumes:
+      - application/json
+      description: Create a new account for a user
+      parameters:
+      - description: Account info
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/account.Account'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Create a new account
+      tags:
+      - accounts
+  /accounts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete account by ID
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Delete account by ID
+      tags:
+      - accounts
+    get:
+      consumes:
+      - application/json
+      description: Get account by ID
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account.Account'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Get account by ID
+      tags:
+      - accounts
+    patch:
+      consumes:
+      - application/json
+      description: Update account by ID
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Account info
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account.Account'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Update account by ID
+      tags:
+      - accounts
+  /accounts/{id}/deposit:
+    post:
+      consumes:
+      - application/json
+      description: Deposit amount to account
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Deposit amount
+        in: body
+        name: amount
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DepositRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account.Account'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Deposit amount to account
+      tags:
+      - accounts
+  /accounts/{id}/withdraw:
+    post:
+      consumes:
+      - application/json
+      description: Withdraw amount from account
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Withdraw amount
+        in: body
+        name: amount
+        required: true
+        schema:
+          $ref: '#/definitions/dto.WithdrawRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account.Account'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Withdraw amount from account
+      tags:
+      - accounts
+  /admins/login:
+    post:
+      consumes:
+      - application/json
+      description: Login as an admin
+      parameters:
+      - description: Admin info
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Login as an admin
+      tags:
+      - admins
+  /admins/logout:
+    post:
+      description: Logout an admin
+      responses: {}
+      summary: Logout an admin
+      tags:
+      - admins
+  /admins/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refresh an admin token
+      parameters:
+      - description: Token info
+        in: body
+        name: token
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Refresh an admin token
+      tags:
+      - admins
+  /admins/signup:
+    post:
+      consumes:
+      - application/json
+      description: Sign up as an admin
+      parameters:
+      - description: Admin info
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Sign up as an admin
+      tags:
+      - admins
+  /admins/verify:
+    post:
+      consumes:
+      - application/json
+      description: Verify an admin
+      parameters:
+      - description: Verification info
+        in: body
+        name: verification
+        required: true
+        schema:
+          $ref: '#/definitions/dto.VerificationRequest'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Verify an admin
+      tags:
+      - admins
+  /fees:
+    get:
+      consumes:
+      - application/json
+      description: Get all fees
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/fee.Fee'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Get all fees
+      tags:
+      - fees
+  /fees/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete fee
+      parameters:
+      - description: Fee ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Delete fee
+      tags:
+      - fees
+    patch:
+      consumes:
+      - application/json
+      description: Update fee
+      parameters:
+      - description: Fee ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Fee info
+        in: body
+        name: fee
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateFeeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fee.Fee'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Update fee
+      tags:
+      - fees
+  /transfers:
+    post:
+      consumes:
+      - application/json
+      description: Create a new transfer between two accounts
+      parameters:
+      - description: Transfer info
+        in: body
+        name: transfer
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TransferRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Transfer completed successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Create a new transfer
+      tags:
+      - transfers
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/user.User'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: User info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Create a new user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Delete user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Get user by ID
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Update user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.APIError'
+      summary: Update user
+      tags:
+      - users
+swagger: "2.0"
