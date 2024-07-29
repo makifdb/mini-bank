@@ -12,6 +12,7 @@ Mini-Bank is a simple banking application written in Go. The project is develope
 - **Logger:** Zap
 - **Architecture:** Domain-Driven Design (DDD)
 - **ID Management:** UUID
+- **Monetary Calculations**: shopspring/decimal
 - **Email:** Third-party library
 - **Admin Login:** Redis and passwordless login via email
 - **Documentation:** Fully documented with Swagger
@@ -27,6 +28,7 @@ Mini-Bank is a simple banking application written in Go. The project is develope
 - **Dependency Injection:** Manual
 - **Configuration Management:** Envconfig
 - **ID Management:** TSUID
+- **Monetary Calculations:** cockroachdb/apd
 - **Architecture:** Clean Architecture
 - **Email:** Third-party library
 - **Admin Login:** Redis and passwordless login via email
@@ -42,6 +44,7 @@ Mini-Bank is a simple banking application written in Go. The project is develope
 - **Database:** SQLite
 - **Dependency Injection:** Manual
 - **ID Management:** int64
+- **Monetary Calculations:** math/big.Float
 - **Architecture:** Simple Layered Architecture
 - **Email:** Go standard library
 - **Admin Login:** Redis and passwordless login via email
