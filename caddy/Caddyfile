@@ -1,0 +1,14 @@
+{
+    auto_https off
+}
+
+:80 {
+    reverse_proxy /corporate* corporate:8080
+    reverse_proxy /speedster* speedster:8080
+    reverse_proxy /minimalist* minimalist:8080
+
+    reverse_proxy {
+        to corporate:8080 speedster:8080 minimalist:8080
+        lb_policy round_robin
+    }
+}
