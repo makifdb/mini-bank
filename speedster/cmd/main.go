@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/makifdb/mini-bank/speedster/internal/adapters/db/postgres/repository"
+	"github.com/makifdb/mini-bank/speedster/internal/adapters/db/redis"
 	"github.com/makifdb/mini-bank/speedster/internal/app"
 	"github.com/makifdb/mini-bank/speedster/internal/config"
-	"github.com/makifdb/mini-bank/speedster/internal/redis"
-	"github.com/makifdb/mini-bank/speedster/internal/repository"
 	"github.com/makifdb/mini-bank/speedster/pkg/utils"
 
 	"github.com/rs/zerolog"

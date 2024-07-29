@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/makifdb/mini-bank/speedster/internal/repository"
-	"github.com/makifdb/mini-bank/speedster/pkg/models"
+	"github.com/makifdb/mini-bank/speedster/internal/adapters/db/postgres/repository"
+	"github.com/makifdb/mini-bank/speedster/internal/core/domain"
 	"github.com/makifdb/mini-bank/speedster/pkg/utils"
 )
 
@@ -47,7 +47,7 @@ func (s *TransactionService) Transfer(ctx context.Context, fromAccountID, toAcco
 		return err
 	}
 
-	txn, err := models.NewTransaction(fromAccountID, toAccountID, amount, fee)
+	txn, err := domain.NewTransaction(fromAccountID, toAccountID, amount, fee)
 	if err != nil {
 		return err
 	}
@@ -55,10 +55,10 @@ func (s *TransactionService) Transfer(ctx context.Context, fromAccountID, toAcco
 	return s.transactionRepo.Create(ctx, txn)
 }
 
-func (s *TransactionService) GetTransactionByID(ctx context.Context, id int64) (*models.Transaction, error) {
+func (s *TransactionService) GetTransactionByID(ctx context.Context, id int64) (*domain.Transaction, error) {
 	return s.transactionRepo.FindByID(ctx, id)
 }
 
-func (s *TransactionService) GetTransactions(ctx context.Context, limit, offset int) ([]models.Transaction, error) {
+func (s *TransactionService) GetTransactions(ctx context.Context, limit, offset int) ([]domain.Transaction, error) {
 	return s.transactionRepo.FindAll(ctx, limit, offset)
 }

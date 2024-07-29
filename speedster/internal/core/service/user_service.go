@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/makifdb/mini-bank/speedster/internal/repository"
-	"github.com/makifdb/mini-bank/speedster/pkg/models"
+	"github.com/makifdb/mini-bank/speedster/internal/adapters/db/postgres/repository"
+	"github.com/makifdb/mini-bank/speedster/internal/core/domain"
 )
 
 type UserService struct {
@@ -18,8 +18,8 @@ func NewUserService(userRepo *repository.UserRepository) *UserService {
 	}
 }
 
-func (s *UserService) CreateUser(ctx context.Context, firstName, lastName, email string) (*models.User, error) {
-	user, err := models.NewUser(firstName, lastName, email)
+func (s *UserService) CreateUser(ctx context.Context, firstName, lastName, email string) (*domain.User, error) {
+	user, err := domain.NewUser(firstName, lastName, email)
 	if err != nil {
 		return nil, err
 	}
@@ -32,15 +32,15 @@ func (s *UserService) CreateUser(ctx context.Context, firstName, lastName, email
 	return user, nil
 }
 
-func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*models.User, error) {
+func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
 	return s.userRepo.FindByEmail(ctx, email)
 }
 
-func (s *UserService) GetUserByID(ctx context.Context, id string) (*models.User, error) {
+func (s *UserService) GetUserByID(ctx context.Context, id string) (*domain.User, error) {
 	return s.userRepo.FindByID(ctx, id)
 }
 
-func (s *UserService) UpdateUser(ctx context.Context, id string, firstName, lastName, email string) (*models.User, error) {
+func (s *UserService) UpdateUser(ctx context.Context, id string, firstName, lastName, email string) (*domain.User, error) {
 	user, err := s.userRepo.FindByID(ctx, id)
 	if err != nil {
 		return nil, err
@@ -63,10 +63,10 @@ func (s *UserService) DeleteUser(ctx context.Context, id string) error {
 	return s.userRepo.Delete(ctx, id)
 }
 
-func (s *UserService) ListUsers(ctx context.Context, limit, offset int) ([]models.User, error) {
+func (s *UserService) ListUsers(ctx context.Context, limit, offset int) ([]domain.User, error) {
 	return s.userRepo.FindAll(ctx, limit, offset)
 }
 
-func (s *UserService) GetUserByIDWithAccounts(ctx context.Context, id string) (*models.User, error) {
+func (s *UserService) GetUserByIDWithAccounts(ctx context.Context, id string) (*domain.User, error) {
 	return s.userRepo.FindByIDWithAccounts(ctx, id)
 }

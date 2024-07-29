@@ -1,4 +1,4 @@
-package models
+package domain
 
 import "github.com/makifdb/mini-bank/speedster/pkg/utils"
 

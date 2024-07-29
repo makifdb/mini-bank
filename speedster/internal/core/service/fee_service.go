@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/makifdb/mini-bank/speedster/internal/repository"
-	"github.com/makifdb/mini-bank/speedster/pkg/models"
+	"github.com/makifdb/mini-bank/speedster/internal/adapters/db/postgres/repository"
+	"github.com/makifdb/mini-bank/speedster/internal/core/domain"
 	"github.com/makifdb/mini-bank/speedster/pkg/utils"
 )
 
@@ -18,8 +18,8 @@ func NewFeeService(feeRepo *repository.FeeRepository) *FeeService {
 	}
 }
 
-func (s *FeeService) CreateFee(ctx context.Context, amount string, feeType models.FeeType, currency models.CurrencyCode) (*models.Fee, error) {
-	f, err := models.NewFee(amount, feeType, currency)
+func (s *FeeService) CreateFee(ctx context.Context, amount string, feeType domain.FeeType, currency domain.CurrencyCode) (*domain.Fee, error) {
+	f, err := domain.NewFee(amount, feeType, currency)
 	if err != nil {
 		return nil, err
 	}
@@ -29,11 +29,11 @@ func (s *FeeService) CreateFee(ctx context.Context, amount string, feeType model
 	return f, nil
 }
 
-func (s *FeeService) GetFees(ctx context.Context, limit, offset int) ([]models.Fee, error) {
+func (s *FeeService) GetFees(ctx context.Context, limit, offset int) ([]domain.Fee, error) {
 	return s.feeRepo.FindAll(ctx, limit, offset)
 }
 
-func (s *FeeService) UpdateFee(ctx context.Context, id, amount string, feeType models.FeeType, currency models.CurrencyCode) (*models.Fee, error) {
+func (s *FeeService) UpdateFee(ctx context.Context, id, amount string, feeType domain.FeeType, currency domain.CurrencyCode) (*domain.Fee, error) {
 	f, err := s.feeRepo.FindByID(ctx, id)
 	if err != nil {
 		return nil, err

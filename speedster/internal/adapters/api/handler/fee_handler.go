@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/makifdb/mini-bank/speedster/internal/service"
-	"github.com/makifdb/mini-bank/speedster/pkg/models"
+	"github.com/makifdb/mini-bank/speedster/internal/core/domain"
+	"github.com/makifdb/mini-bank/speedster/internal/core/service"
 )
 
 type FeeHandler struct {
@@ -33,15 +33,15 @@ func (h *FeeHandler) RegisterRoutes(app *fiber.App) {
 // @Accept json
 // @Produce json
 // @Param fee body CreateFeeRequest true "Fee request"
-// @Success 200 {object} models.Fee
+// @Success 200 {object} domain.Fee
 // @Failure 400 {object} fiber.Map
 // @Failure 500 {object} fiber.Map
 // @Router /fees [post]
 func (h *FeeHandler) CreateFee(c *fiber.Ctx) error {
 	type CreateFeeRequest struct {
 		Amount   string              `json:"amount" validate:"required"`
-		Type     models.FeeType      `json:"type" validate:"required"`
-		Currency models.CurrencyCode `json:"currency" validate:"required"`
+		Type     domain.FeeType      `json:"type" validate:"required"`
+		Currency domain.CurrencyCode `json:"currency" validate:"required"`
 	}
 
 	var req CreateFeeRequest
@@ -65,15 +65,15 @@ func (h *FeeHandler) CreateFee(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "Fee ID"
 // @Param fee body UpdateFeeRequest true "Fee request"
-// @Success 200 {object} models.Fee
+// @Success 200 {object} domain.Fee
 // @Failure 400 {object} fiber.Map
 // @Failure 500 {object} fiber.Map
 // @Router /fees/{id} [put]
 func (h *FeeHandler) UpdateFee(c *fiber.Ctx) error {
 	type UpdateFeeRequest struct {
 		Amount   string              `json:"amount" validate:"required"`
-		Type     models.FeeType      `json:"type" validate:"required"`
-		Currency models.CurrencyCode `json:"currency" validate:"required"`
+		Type     domain.FeeType      `json:"type" validate:"required"`
+		Currency domain.CurrencyCode `json:"currency" validate:"required"`
 	}
 
 	id := c.Params("id")
@@ -118,7 +118,7 @@ func (h *FeeHandler) DeleteFee(c *fiber.Ctx) error {
 // @Produce json
 // @Param limit query int false "Limit"
 // @Param offset query int false "Offset"
-// @Success 200 {array} models.Fee
+// @Success 200 {array} domain.Fee
 // @Failure 400 {object} fiber.Map
 // @Failure 500 {object} fiber.Map
 // @Router /fees [get]

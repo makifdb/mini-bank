@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/makifdb/mini-bank/speedster/pkg/models"
+	"github.com/makifdb/mini-bank/speedster/internal/core/domain"
 	"github.com/makifdb/mini-bank/speedster/pkg/utils"
 )
 
@@ -16,17 +16,17 @@ func NewAccountRepository(db *pgxpool.Pool) *AccountRepository {
 	return &AccountRepository{db: db}
 }
 
-func (r *AccountRepository) Create(ctx context.Context, acc *models.Account) error {
+func (r *AccountRepository) Create(ctx context.Context, acc *domain.Account) error {
 	query := `INSERT INTO accounts (id, balance, currency, user_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)`
 	_, err := r.db.Exec(ctx, query, acc.ID, acc.Balance.String(), acc.Currency, acc.UserID, acc.CreatedAt, acc.UpdatedAt)
 	return err
 }
 
-func (r *AccountRepository) FindByID(ctx context.Context, id string) (*models.Account, error) {
+func (r *AccountRepository) FindByID(ctx context.Context, id string) (*domain.Account, error) {
 	query := `SELECT id, balance, currency, user_id, created_at, updated_at FROM accounts WHERE external_id = $1`
 	row := r.db.QueryRow(ctx, query, id)
 
-	acc := &models.Account{}
+	acc := &domain.Account{}
 	var balanceStr string
 
 	err := row.Scan(&acc.ID, &balanceStr, &acc.Currency, &acc.UserID, &acc.CreatedAt, &acc.UpdatedAt)
@@ -42,7 +42,7 @@ func (r *AccountRepository) FindByID(ctx context.Context, id string) (*models.Ac
 	return acc, nil
 }
 
-func (r *AccountRepository) Update(ctx context.Context, acc *models.Account) error {
+func (r *AccountRepository) Update(ctx context.Context, acc *domain.Account) error {
 	query := `UPDATE accounts SET balance = $1, currency = $2, updated_at = $3 WHERE external_id = $4`
 	_, err := r.db.Exec(ctx, query, acc.Balance.String(), acc.Currency, acc.UpdatedAt, acc.ID)
 	return err
@@ -54,7 +54,7 @@ func (r *AccountRepository) Delete(ctx context.Context, id string) error {
 	return err
 }
 
-func (r *AccountRepository) FindAllByUserID(ctx context.Context, userID string, limit, offset int) ([]models.Account, error) {
+func (r *AccountRepository) FindAllByUserID(ctx context.Context, userID string, limit, offset int) ([]domain.Account, error) {
 	query := `SELECT id, balance, currency, user_id, created_at, updated_at FROM accounts WHERE user_id = $1 LIMIT $2 OFFSET $3`
 	rows, err := r.db.Query(ctx, query, userID, limit, offset)
 	if err != nil {
@@ -62,10 +62,10 @@ func (r *AccountRepository) FindAllByUserID(ctx context.Context, userID string, 
 	}
 	defer rows.Close()
 
-	var accounts []models.Account
+	var accounts []domain.Account
 
 	for rows.Next() {
-		acc := models.Account{}
+		acc := domain.Account{}
 		var balanceStr string
 
 		err := rows.Scan(&acc.ID, &balanceStr, &acc.Currency, &acc.UserID, &acc.CreatedAt, &acc.UpdatedAt)

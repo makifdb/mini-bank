@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/makifdb/mini-bank/speedster/internal/service"
+	"github.com/makifdb/mini-bank/speedster/internal/core/service"
 	"github.com/makifdb/mini-bank/speedster/pkg/utils"
 )
 

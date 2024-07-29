@@ -7,12 +7,12 @@ import (
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/makifdb/mini-bank/speedster/internal/handler"
 	"github.com/redis/go-redis/v9"
 
+	"github.com/makifdb/mini-bank/speedster/internal/adapters/api/handler"
+	"github.com/makifdb/mini-bank/speedster/internal/adapters/db/postgres/repository"
+	"github.com/makifdb/mini-bank/speedster/internal/core/service"
 	"github.com/makifdb/mini-bank/speedster/internal/middleware"
-	"github.com/makifdb/mini-bank/speedster/internal/repository"
-	"github.com/makifdb/mini-bank/speedster/internal/service"
 	"github.com/makifdb/mini-bank/speedster/pkg/utils"
 	"github.com/rs/zerolog"
 )

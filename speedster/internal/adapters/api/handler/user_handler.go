@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/makifdb/mini-bank/speedster/internal/service"
+	"github.com/makifdb/mini-bank/speedster/internal/core/service"
 )
 
 type UserHandler struct {
@@ -33,8 +33,8 @@ func (h *UserHandler) RegisterRoutes(app *fiber.App) {
 // @Tags users
 // @Accept  json
 // @Produce  json
-// @Param user body models.User true "Create user"
-// @Success 200 {object} models.User
+// @Param user body domain.User true "Create user"
+// @Success 200 {object} domain.User
 // @Failure 400 {object} fiber.Map
 // @Router /users [post]
 func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
@@ -64,7 +64,7 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "User ID"
-// @Success 200 {object} models.User
+// @Success 200 {object} domain.User
 // @Failure 404 {object} fiber.Map
 // @Router /users/{id} [get]
 func (h *UserHandler) GetUserByID(c *fiber.Ctx) error {
@@ -83,8 +83,8 @@ func (h *UserHandler) GetUserByID(c *fiber.Ctx) error {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "User ID"
-// @Param user body models.User true "Update user"
-// @Success 200 {object} models.User
+// @Param user body domain.User true "Update user"
+// @Success 200 {object} domain.User
 // @Failure 400 {object} fiber.Map
 // @Failure 404 {object} fiber.Map
 // @Router /users/{id} [put]
@@ -134,7 +134,7 @@ func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
 // @Produce  json
 // @Param limit query int false "Limit"
 // @Param offset query int false "Offset"
-// @Success 200 {array} models.User
+// @Success 200 {array} domain.User
 // @Router /users [get]
 func (h *UserHandler) ListUsers(c *fiber.Ctx) error {
 	limit := c.QueryInt("limit", 10)
@@ -155,7 +155,7 @@ func (h *UserHandler) ListUsers(c *fiber.Ctx) error {
 // @Accept  json
 // @Produce  json
 // @Param id path string true "User ID"
-// @Success 200 {object} models.User
+// @Success 200 {object} domain.User
 // @Failure 404 {object} fiber.Map
 // @Router /users/{id}/accounts [get]
 func (h *UserHandler) GetUserByIDWithAccounts(c *fiber.Ctx) error {

@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/makifdb/mini-bank/speedster/internal/repository"
-	"github.com/makifdb/mini-bank/speedster/pkg/models"
+	"github.com/makifdb/mini-bank/speedster/internal/adapters/db/postgres/repository"
+	"github.com/makifdb/mini-bank/speedster/internal/core/domain"
 	"github.com/makifdb/mini-bank/speedster/pkg/utils"
 	"github.com/redis/go-redis/v9"
 )
@@ -28,8 +28,8 @@ func NewAdminService(adminRepo *repository.AdminRepository, redisClient *redis.C
 	}
 }
 
-func (s *AdminService) SignUp(ctx context.Context, email string) (*models.Admin, error) {
-	admin, err := models.NewAdmin(email)
+func (s *AdminService) SignUp(ctx context.Context, email string) (*domain.Admin, error) {
+	admin, err := domain.NewAdmin(email)
 	if err != nil {
 		return nil, err
 	}
