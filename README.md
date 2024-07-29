@@ -1,6 +1,19 @@
 # Mini-Bank
 
 Mini-Bank is a simple banking application written in Go. The project is developed in three different ways using various architectural approaches: **Corporate**, **Speedster**, and **Minimalist**. Each version is optimized for different needs and priorities.
+
+## Project Overview
+
+All versions of the project are developed for educational purposes. They are not production-ready applications. They may contain bugs, security vulnerabilities, and performance issues.
+
+All versions of the project have the following features:
+- **User Management:** User creation, editing, and deletion.
+- **Account Management:** Account creation with different currencies, balance checking, and transaction history.
+- **Transaction Management:** Deposit, withdrawal, and transfer between accounts.
+- **Admin Management:** Admin login and user management.
+- **Email Management:** Sending emails for admin passwordless login and transaction notifications.
+- **Fee Management:** Fee creation and deduction from transactions.
+
 ## Project Structures
 
 ### 1. Corporate
